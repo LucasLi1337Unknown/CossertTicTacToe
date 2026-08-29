@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cossert v0.1 — Tic Tac Toe</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:#101010;color:#f3f3f3;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;display:grid;place-items:center;padding:24px}
+.app{width:min(900px,100%);background:#171717;border:1px solid #3c3c3c;border-radius:18px;overflow:hidden}
+header{padding:18px 22px;border-bottom:1px solid #333;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+h1{font-size:20px;margin:0}.sub{font-size:12px;color:#aaa}
+#console{background:#0b0b0b;min-height:500px;max-height:620px;overflow:auto;padding:22px;white-space:pre-wrap;line-height:1.55}
+.controls{display:flex;gap:10px;padding:16px;border-top:1px solid #333}
+input{flex:1;min-width:0;background:#0e0e0e;color:white;border:1px solid #555;border-radius:10px;padding:13px;font:inherit}
+button{border:0;border-radius:10px;padding:13px 16px;font:inherit;cursor:pointer}
+#run{background:#f1f1f1;color:#111}#send{background:#333;color:#fff}button:disabled,input:disabled{opacity:.45;cursor:not-allowed}
+.note{padding:0 16px 16px;color:#999;font-size:12px}
+</style>
+</head>
+<body>
+<main class="app">
+<header><h1>Cossert v0.1 — Tic Tac Toe 👹</h1><div class="sub">game.cos → interpreter.js → output</div></header>
+<div id="console">Press RUN COSSERT. Two humans play X and O.</div>
+<div class="controls">
+<input id="input" placeholder="Cossert asks for input here…" disabled>
+<button id="send" disabled>SEND</button>
+<button id="run">RUN COSSERT</button>
+</div>
+<div class="note">The game logic lives in <b>game.cos</b>. Delete it and the game cannot run.</div>
+</main>
+<script src="./interpreter.js"></script>
+<script>
+const out=document.getElementById("console");
+const input=document.getElementById("input");
+const send=document.getElementById("send");
+const run=document.getElementById("run");
+let resolver=null;
+
+function write(s=""){
+  if(out.textContent.startsWith("Press RUN COSSERT")) out.textContent="";
+  out.textContent+=String(s)+"\n";
+  out.scrollTop=out.scrollHeight;
+}
+function ask(q){
+  write(q);
+  input.disabled=false;send.disabled=false;input.focus();
+  return new Promise(resolve=>{
+    resolver=value=>{
+      resolver=null;input.disabled=true;send.disabled=true;input.value="";
+      resolve(value);
+    };
+  });
+}
+function submit(){
+  if(!resolver)return;
+  const v=input.value;
+  write("> "+v);
+  resolver(v);
+}
+send.addEventListener("click",submit);
+input.addEventListener("keydown",e=>{if(e.key==="Enter")submit()});
+
+run.addEventListener("click",async()=>{
+  run.disabled=true;
+  out.textContent="";
+  try{
+    const r=await fetch("./game.cos",{cache:"no-store"});
+    if(!r.ok)throw new Error("Could not load game.cos");
+    const source=await r.text();
+    const vm=new CossertInterpreter({output:write,input:ask});
+    await vm.run(source);
+    write("");
+    write("[COSSERT PROGRAM FINISHED]");
+  }catch(err){
+    write("");
+    write("COSSERT ERROR: "+err.message);
+  }finally{
+    run.disabled=false;
+  }
+});
+</script>
+</body>
+</html>
