@@ -1,0 +1,609 @@
+YO HOWSURDOIN 0.1
+
+IWANNACOMENT:
+COSSERT TIC TAC TOE - HUMAN VS HUMAN OR HUMAN VS AI
+X IS ALWAYS THE FIRST PLAYER.
+IN AI MODE THE HUMAN IS X AND THE AI IS O.
+THE AI TRIES TO WIN, THEN BLOCK, THEN TAKES CENTER, CORNERS, AND EDGES.
+THERE IS STILL NO ELSE IF BECAUSE COSSERT ENJOYS SUFFERING.
+COMENT FINISH
+
+HAV A LIST "board" LIKE ["0", "1", "2", "3", "4", "5", "6", "7", "8"]:
+
+GET "gameMode" LETITB 0
+GET "turn" LETITB "X"
+GET "move" LETITB 0
+GET "cell" LETITB ""
+GET "movesMade" LETITB 0
+GET "newCount" LETITB 0
+GET "won" LETITB 0
+GET "ignore" LETITB 0
+GET "aiMove" LETITB -1
+GET "oldTurn" LETITB ""
+GET "c0" LETITB "0"
+GET "c1" LETITB "1"
+GET "c2" LETITB "2"
+GET "c3" LETITB "3"
+GET "c4" LETITB "4"
+GET "c5" LETITB "5"
+GET "c6" LETITB "6"
+GET "c7" LETITB "7"
+GET "c8" LETITB "8"
+
+IWANNACOMENT:
+SNAPSHOT READS EVERY BOARD SLOT USING TAKITOUT, THEN PUTS IT BACK.
+THIS IS HOW COSSERT READS A LIST WITHOUT PERMANENTLY DESTROYING IT.
+COMENT FINISH
+
+ELLO "SNAPSHOT" YOUR NOW DOIN {
+    "c0" CHANGETO-> TAKITOUT{board}[0]
+    "c1" CHANGETO-> TAKITOUT{board}[1]
+    "c2" CHANGETO-> TAKITOUT{board}[2]
+    "c3" CHANGETO-> TAKITOUT{board}[3]
+    "c4" CHANGETO-> TAKITOUT{board}[4]
+    "c5" CHANGETO-> TAKITOUT{board}[5]
+    "c6" CHANGETO-> TAKITOUT{board}[6]
+    "c7" CHANGETO-> TAKITOUT{board}[7]
+    "c8" CHANGETO-> TAKITOUT{board}[8]
+    UREPLACEIT{board}[0] W/c0
+    UREPLACEIT{board}[1] W/c1
+    UREPLACEIT{board}[2] W/c2
+    UREPLACEIT{board}[3] W/c3
+    UREPLACEIT{board}[4] W/c4
+    UREPLACEIT{board}[5] W/c5
+    UREPLACEIT{board}[6] W/c6
+    UREPLACEIT{board}[7] W/c7
+    UREPLACEIT{board}[8] W/c8
+    FINALANSER(0)
+}
+
+ELLO "SHOWBOARD" YOUR NOW DOIN {
+    GET "snapShow" LETITB SNAPSHOT()
+    GET "r0a" LETITB YO COMBINE c0 W/" | "
+    GET "r0b" LETITB YO COMBINE r0a W/c1
+    GET "r0c" LETITB YO COMBINE r0b W/" | "
+    GET "row0" LETITB YO COMBINE r0c W/c2
+    GET "r1a" LETITB YO COMBINE c3 W/" | "
+    GET "r1b" LETITB YO COMBINE r1a W/c4
+    GET "r1c" LETITB YO COMBINE r1b W/" | "
+    GET "row1" LETITB YO COMBINE r1c W/c5
+    GET "r2a" LETITB YO COMBINE c6 W/" | "
+    GET "r2b" LETITB YO COMBINE r2a W/c7
+    GET "r2c" LETITB YO COMBINE r2b W/" | "
+    GET "row2" LETITB YO COMBINE r2c W/c8
+    SPITOUT("")
+    SPITOUT(row0)
+    SPITOUT("--+---+--")
+    SPITOUT(row1)
+    SPITOUT("--+---+--")
+    SPITOUT(row2)
+    SPITOUT("")
+    FINALANSER(0)
+}
+
+ELLO "CHECKWIN" YOUR NOW DOIN {
+    GET "snapWin" LETITB SNAPSHOT()
+    HMM WATIF(c0 == turn)
+        HMM WATIF(c1 == turn)
+            HMM WATIF(c2 == turn)
+                FINALANSER(1)
+    HMM WATIF(c3 == turn)
+        HMM WATIF(c4 == turn)
+            HMM WATIF(c5 == turn)
+                FINALANSER(1)
+    HMM WATIF(c6 == turn)
+        HMM WATIF(c7 == turn)
+            HMM WATIF(c8 == turn)
+                FINALANSER(1)
+    HMM WATIF(c0 == turn)
+        HMM WATIF(c3 == turn)
+            HMM WATIF(c6 == turn)
+                FINALANSER(1)
+    HMM WATIF(c1 == turn)
+        HMM WATIF(c4 == turn)
+            HMM WATIF(c7 == turn)
+                FINALANSER(1)
+    HMM WATIF(c2 == turn)
+        HMM WATIF(c5 == turn)
+            HMM WATIF(c8 == turn)
+                FINALANSER(1)
+    HMM WATIF(c0 == turn)
+        HMM WATIF(c4 == turn)
+            HMM WATIF(c8 == turn)
+                FINALANSER(1)
+    HMM WATIF(c2 == turn)
+        HMM WATIF(c4 == turn)
+            HMM WATIF(c6 == turn)
+                FINALANSER(1)
+    FINALANSER(0)
+}
+
+ELLO "HUMANMOVE" YOUR NOW DOIN {
+    GOAROUND 100 TIMES:
+        YO USER DILE("Choose square 0-8: "): move
+        HMM WATIF(move < 0)
+            SPITOUT("NOPE. IDs START AT 0.")
+            SKIPTIS
+        HMM WATIF(move > 8)
+            SPITOUT("NOPE. IDs END AT 8.")
+            SKIPTIS
+        "cell" CHANGETO-> TAKITOUT{board}[move]
+        HMM WATIF(cell == "X")
+            UREPLACEIT{board}[move] W/cell
+            SPITOUT("THAT SQUARE IS ALREADY X.")
+            SKIPTIS
+        HMM WATIF(cell == "O")
+            UREPLACEIT{board}[move] W/cell
+            SPITOUT("THAT SQUARE IS ALREADY O.")
+            SKIPTIS
+        UREPLACEIT{board}[move] W/turn
+        FINALANSER(move)
+    FINALANSER(-1)
+}
+
+IWANNACOMENT:
+THE AI IS PURPOSELY WRITTEN THE LONG COSSERT WAY.
+FIRST IT SEARCHES EVERY WINNING LINE FOR AN O-O-EMPTY PATTERN.
+THEN IT SEARCHES EVERY LINE FOR X-X-EMPTY TO BLOCK THE HUMAN.
+THEN IT USES A POSITION PREFERENCE.
+NO JAVASCRIPT IS CHOOSING THE MOVE.
+COMENT FINISH
+
+ELLO "AIMOVE" YOUR NOW DOIN {
+    GET "snapAI" LETITB SNAPSHOT()
+    "aiMove" CHANGETO-> -1
+    SPITOUT("AI IS THINKING IN COSSERT...")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c0 == "O")
+            HMM WATIF(c1 == "O")
+                HMM WATIF(NO{c2 == "X"})
+                    HMM WATIF(NO{c2 == "O"})
+                        "aiMove" CHANGETO-> 2
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c0 == "O")
+            HMM WATIF(c2 == "O")
+                HMM WATIF(NO{c1 == "X"})
+                    HMM WATIF(NO{c1 == "O"})
+                        "aiMove" CHANGETO-> 1
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c1 == "O")
+            HMM WATIF(c2 == "O")
+                HMM WATIF(NO{c0 == "X"})
+                    HMM WATIF(NO{c0 == "O"})
+                        "aiMove" CHANGETO-> 0
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c3 == "O")
+            HMM WATIF(c4 == "O")
+                HMM WATIF(NO{c5 == "X"})
+                    HMM WATIF(NO{c5 == "O"})
+                        "aiMove" CHANGETO-> 5
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c3 == "O")
+            HMM WATIF(c5 == "O")
+                HMM WATIF(NO{c4 == "X"})
+                    HMM WATIF(NO{c4 == "O"})
+                        "aiMove" CHANGETO-> 4
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c4 == "O")
+            HMM WATIF(c5 == "O")
+                HMM WATIF(NO{c3 == "X"})
+                    HMM WATIF(NO{c3 == "O"})
+                        "aiMove" CHANGETO-> 3
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c6 == "O")
+            HMM WATIF(c7 == "O")
+                HMM WATIF(NO{c8 == "X"})
+                    HMM WATIF(NO{c8 == "O"})
+                        "aiMove" CHANGETO-> 8
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c6 == "O")
+            HMM WATIF(c8 == "O")
+                HMM WATIF(NO{c7 == "X"})
+                    HMM WATIF(NO{c7 == "O"})
+                        "aiMove" CHANGETO-> 7
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c7 == "O")
+            HMM WATIF(c8 == "O")
+                HMM WATIF(NO{c6 == "X"})
+                    HMM WATIF(NO{c6 == "O"})
+                        "aiMove" CHANGETO-> 6
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c0 == "O")
+            HMM WATIF(c3 == "O")
+                HMM WATIF(NO{c6 == "X"})
+                    HMM WATIF(NO{c6 == "O"})
+                        "aiMove" CHANGETO-> 6
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c0 == "O")
+            HMM WATIF(c6 == "O")
+                HMM WATIF(NO{c3 == "X"})
+                    HMM WATIF(NO{c3 == "O"})
+                        "aiMove" CHANGETO-> 3
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c3 == "O")
+            HMM WATIF(c6 == "O")
+                HMM WATIF(NO{c0 == "X"})
+                    HMM WATIF(NO{c0 == "O"})
+                        "aiMove" CHANGETO-> 0
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c1 == "O")
+            HMM WATIF(c4 == "O")
+                HMM WATIF(NO{c7 == "X"})
+                    HMM WATIF(NO{c7 == "O"})
+                        "aiMove" CHANGETO-> 7
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c1 == "O")
+            HMM WATIF(c7 == "O")
+                HMM WATIF(NO{c4 == "X"})
+                    HMM WATIF(NO{c4 == "O"})
+                        "aiMove" CHANGETO-> 4
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c4 == "O")
+            HMM WATIF(c7 == "O")
+                HMM WATIF(NO{c1 == "X"})
+                    HMM WATIF(NO{c1 == "O"})
+                        "aiMove" CHANGETO-> 1
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c2 == "O")
+            HMM WATIF(c5 == "O")
+                HMM WATIF(NO{c8 == "X"})
+                    HMM WATIF(NO{c8 == "O"})
+                        "aiMove" CHANGETO-> 8
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c2 == "O")
+            HMM WATIF(c8 == "O")
+                HMM WATIF(NO{c5 == "X"})
+                    HMM WATIF(NO{c5 == "O"})
+                        "aiMove" CHANGETO-> 5
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c5 == "O")
+            HMM WATIF(c8 == "O")
+                HMM WATIF(NO{c2 == "X"})
+                    HMM WATIF(NO{c2 == "O"})
+                        "aiMove" CHANGETO-> 2
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c0 == "O")
+            HMM WATIF(c4 == "O")
+                HMM WATIF(NO{c8 == "X"})
+                    HMM WATIF(NO{c8 == "O"})
+                        "aiMove" CHANGETO-> 8
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c0 == "O")
+            HMM WATIF(c8 == "O")
+                HMM WATIF(NO{c4 == "X"})
+                    HMM WATIF(NO{c4 == "O"})
+                        "aiMove" CHANGETO-> 4
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c4 == "O")
+            HMM WATIF(c8 == "O")
+                HMM WATIF(NO{c0 == "X"})
+                    HMM WATIF(NO{c0 == "O"})
+                        "aiMove" CHANGETO-> 0
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c2 == "O")
+            HMM WATIF(c4 == "O")
+                HMM WATIF(NO{c6 == "X"})
+                    HMM WATIF(NO{c6 == "O"})
+                        "aiMove" CHANGETO-> 6
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c2 == "O")
+            HMM WATIF(c6 == "O")
+                HMM WATIF(NO{c4 == "X"})
+                    HMM WATIF(NO{c4 == "O"})
+                        "aiMove" CHANGETO-> 4
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c4 == "O")
+            HMM WATIF(c6 == "O")
+                HMM WATIF(NO{c2 == "X"})
+                    HMM WATIF(NO{c2 == "O"})
+                        "aiMove" CHANGETO-> 2
+                        SPITOUT("AI FOUND A WINNING MOVE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c0 == "X")
+            HMM WATIF(c1 == "X")
+                HMM WATIF(NO{c2 == "X"})
+                    HMM WATIF(NO{c2 == "O"})
+                        "aiMove" CHANGETO-> 2
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c0 == "X")
+            HMM WATIF(c2 == "X")
+                HMM WATIF(NO{c1 == "X"})
+                    HMM WATIF(NO{c1 == "O"})
+                        "aiMove" CHANGETO-> 1
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c1 == "X")
+            HMM WATIF(c2 == "X")
+                HMM WATIF(NO{c0 == "X"})
+                    HMM WATIF(NO{c0 == "O"})
+                        "aiMove" CHANGETO-> 0
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c3 == "X")
+            HMM WATIF(c4 == "X")
+                HMM WATIF(NO{c5 == "X"})
+                    HMM WATIF(NO{c5 == "O"})
+                        "aiMove" CHANGETO-> 5
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c3 == "X")
+            HMM WATIF(c5 == "X")
+                HMM WATIF(NO{c4 == "X"})
+                    HMM WATIF(NO{c4 == "O"})
+                        "aiMove" CHANGETO-> 4
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c4 == "X")
+            HMM WATIF(c5 == "X")
+                HMM WATIF(NO{c3 == "X"})
+                    HMM WATIF(NO{c3 == "O"})
+                        "aiMove" CHANGETO-> 3
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c6 == "X")
+            HMM WATIF(c7 == "X")
+                HMM WATIF(NO{c8 == "X"})
+                    HMM WATIF(NO{c8 == "O"})
+                        "aiMove" CHANGETO-> 8
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c6 == "X")
+            HMM WATIF(c8 == "X")
+                HMM WATIF(NO{c7 == "X"})
+                    HMM WATIF(NO{c7 == "O"})
+                        "aiMove" CHANGETO-> 7
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c7 == "X")
+            HMM WATIF(c8 == "X")
+                HMM WATIF(NO{c6 == "X"})
+                    HMM WATIF(NO{c6 == "O"})
+                        "aiMove" CHANGETO-> 6
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c0 == "X")
+            HMM WATIF(c3 == "X")
+                HMM WATIF(NO{c6 == "X"})
+                    HMM WATIF(NO{c6 == "O"})
+                        "aiMove" CHANGETO-> 6
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c0 == "X")
+            HMM WATIF(c6 == "X")
+                HMM WATIF(NO{c3 == "X"})
+                    HMM WATIF(NO{c3 == "O"})
+                        "aiMove" CHANGETO-> 3
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c3 == "X")
+            HMM WATIF(c6 == "X")
+                HMM WATIF(NO{c0 == "X"})
+                    HMM WATIF(NO{c0 == "O"})
+                        "aiMove" CHANGETO-> 0
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c1 == "X")
+            HMM WATIF(c4 == "X")
+                HMM WATIF(NO{c7 == "X"})
+                    HMM WATIF(NO{c7 == "O"})
+                        "aiMove" CHANGETO-> 7
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c1 == "X")
+            HMM WATIF(c7 == "X")
+                HMM WATIF(NO{c4 == "X"})
+                    HMM WATIF(NO{c4 == "O"})
+                        "aiMove" CHANGETO-> 4
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c4 == "X")
+            HMM WATIF(c7 == "X")
+                HMM WATIF(NO{c1 == "X"})
+                    HMM WATIF(NO{c1 == "O"})
+                        "aiMove" CHANGETO-> 1
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c2 == "X")
+            HMM WATIF(c5 == "X")
+                HMM WATIF(NO{c8 == "X"})
+                    HMM WATIF(NO{c8 == "O"})
+                        "aiMove" CHANGETO-> 8
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c2 == "X")
+            HMM WATIF(c8 == "X")
+                HMM WATIF(NO{c5 == "X"})
+                    HMM WATIF(NO{c5 == "O"})
+                        "aiMove" CHANGETO-> 5
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c5 == "X")
+            HMM WATIF(c8 == "X")
+                HMM WATIF(NO{c2 == "X"})
+                    HMM WATIF(NO{c2 == "O"})
+                        "aiMove" CHANGETO-> 2
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c0 == "X")
+            HMM WATIF(c4 == "X")
+                HMM WATIF(NO{c8 == "X"})
+                    HMM WATIF(NO{c8 == "O"})
+                        "aiMove" CHANGETO-> 8
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c0 == "X")
+            HMM WATIF(c8 == "X")
+                HMM WATIF(NO{c4 == "X"})
+                    HMM WATIF(NO{c4 == "O"})
+                        "aiMove" CHANGETO-> 4
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c4 == "X")
+            HMM WATIF(c8 == "X")
+                HMM WATIF(NO{c0 == "X"})
+                    HMM WATIF(NO{c0 == "O"})
+                        "aiMove" CHANGETO-> 0
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c2 == "X")
+            HMM WATIF(c4 == "X")
+                HMM WATIF(NO{c6 == "X"})
+                    HMM WATIF(NO{c6 == "O"})
+                        "aiMove" CHANGETO-> 6
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c2 == "X")
+            HMM WATIF(c6 == "X")
+                HMM WATIF(NO{c4 == "X"})
+                    HMM WATIF(NO{c4 == "O"})
+                        "aiMove" CHANGETO-> 4
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(c4 == "X")
+            HMM WATIF(c6 == "X")
+                HMM WATIF(NO{c2 == "X"})
+                    HMM WATIF(NO{c2 == "O"})
+                        "aiMove" CHANGETO-> 2
+                        SPITOUT("AI BLOCKS YOUR ATTACK.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(NO{c4 == "X"})
+            HMM WATIF(NO{c4 == "O"})
+                "aiMove" CHANGETO-> 4
+                SPITOUT("AI TAKES THE CENTER.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(NO{c0 == "X"})
+            HMM WATIF(NO{c0 == "O"})
+                "aiMove" CHANGETO-> 0
+                SPITOUT("AI TAKES A CORNER.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(NO{c2 == "X"})
+            HMM WATIF(NO{c2 == "O"})
+                "aiMove" CHANGETO-> 2
+                SPITOUT("AI TAKES A CORNER.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(NO{c6 == "X"})
+            HMM WATIF(NO{c6 == "O"})
+                "aiMove" CHANGETO-> 6
+                SPITOUT("AI TAKES A CORNER.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(NO{c8 == "X"})
+            HMM WATIF(NO{c8 == "O"})
+                "aiMove" CHANGETO-> 8
+                SPITOUT("AI TAKES A CORNER.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(NO{c1 == "X"})
+            HMM WATIF(NO{c1 == "O"})
+                "aiMove" CHANGETO-> 1
+                SPITOUT("AI TAKES AN EDGE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(NO{c3 == "X"})
+            HMM WATIF(NO{c3 == "O"})
+                "aiMove" CHANGETO-> 3
+                SPITOUT("AI TAKES AN EDGE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(NO{c5 == "X"})
+            HMM WATIF(NO{c5 == "O"})
+                "aiMove" CHANGETO-> 5
+                SPITOUT("AI TAKES AN EDGE.")
+    HMM WATIF(aiMove == -1)
+        HMM WATIF(NO{c7 == "X"})
+            HMM WATIF(NO{c7 == "O"})
+                "aiMove" CHANGETO-> 7
+                SPITOUT("AI TAKES AN EDGE.")
+    HMM WATIF(aiMove >= 0)
+        UREPLACEIT{board}[aiMove] W/"O"
+        SPITOUT("AI CHOSE SQUARE:")
+        SPITOUT(aiMove)
+        FINALANSER(aiMove)
+    FINALANSER(-1)
+}
+
+SPITOUT("======================================")
+SPITOUT("        COSSERT TIC TAC TOE")
+SPITOUT("======================================")
+SPITOUT("1 = HUMAN VS HUMAN")
+SPITOUT("2 = HUMAN VS AI")
+
+GOAROUND 20 TIMES:
+    YO USER DILE("Choose mode 1 or 2: "): gameMode
+    HMM WATIF(gameMode == 1)
+        FRGETABTIT
+    HMM WATIF(gameMode == 2)
+        FRGETABTIT
+    SPITOUT("THAT MODE DOES NOT EXIST.")
+
+HMM WATIF(gameMode == 1)
+    SPITOUT("MODE: HUMAN VS HUMAN")
+HMM WATIF(gameMode == 2)
+    SPITOUT("MODE: HUMAN VS AI")
+    SPITOUT("YOU ARE X. THE AI IS O.")
+
+GET "firstShow" LETITB SHOWBOARD()
+
+GOAROUND 20 TIMES:
+    SPITOUT("CURRENT PLAYER:")
+    SPITOUT(turn)
+
+    HMM WATIF(turn == "X")
+        GET "humanXMove" LETITB HUMANMOVE()
+
+    HMM WATIF(turn == "O")
+        HMM WATIF(gameMode == 1)
+            GET "humanOMove" LETITB HUMANMOVE()
+        HMM WATIF(gameMode == 2)
+            GET "computerMove" LETITB AIMOVE()
+
+    "newCount" CHANGETO-> YO COMBINE movesMade W/1
+    "movesMade" CHANGETO-> newCount
+    GET "afterMoveShow" LETITB SHOWBOARD()
+    "won" CHANGETO-> CHECKWIN()
+
+    HMM WATIF(won == 1)
+        SPITOUT("======================================")
+        SPITOUT("WINNER:")
+        SPITOUT(turn)
+        HMM WATIF(gameMode == 2)
+            HMM WATIF(turn == "X")
+                SPITOUT("HUMAN BEAT THE COSSERT AI.")
+            HMM WATIF(turn == "O")
+                SPITOUT("THE COSSERT AI HAS DEFEATED YOU.")
+        SPITOUT("======================================")
+        FRGETABTIT
+
+    HMM WATIF(movesMade == 9)
+        SPITOUT("======================================")
+        SPITOUT("DRAW. NOBODY GETS THE GLORY.")
+        SPITOUT("======================================")
+        FRGETABTIT
+
+    "oldTurn" CHANGETO-> turn
+    HMM WATIF(oldTurn == "X")
+        "turn" CHANGETO-> "O"
+    HMM WATIF(oldTurn == "O")
+        "turn" CHANGETO-> "X"
+
+OKALFINEBYE
